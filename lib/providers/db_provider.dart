@@ -64,4 +64,39 @@ class DBProvider {
     print(res);
     return res; 
   }
+
+  Future<List<ScanModel>> getAllScans() async {
+    final db = await database;
+    final res = await db.query('Scans');
+    return res.isNotEmpty ? res.map((e) => ScanModel.fromMap(e)).toList() : [];
+  }
+
+  Future<ScanModel?> getScanById(int id) async {
+    final db = await database;
+    final res = await db.query('Scans',where: 'id = ?', whereArgs: [id]);
+
+    if(res.isNotEmpty) {
+      return ScanModel.fromMap(res.first);
+    }
+    return null;
+  }
+
+  Future<int> updateScan(ScanModel nouScan) async {
+    final db = await database;
+    final res = db.update('Scans', nouScan.toMap(), where: 'id = ?', whereArgs: [nouScan.id]);
+
+    return res;
+  }
+
+  // TODO: getScanByType(String type) => Llista de ScanModel
+
+  // TODO: deleteScan(int id) => int
+
+  Future<int> deleteAllScans() async {
+    final db = await database;
+    final res = await db.rawDelete('''
+      DELETE FROM Scans
+    ''');
+    return res;
+  }
 }
