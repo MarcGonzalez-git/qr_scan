@@ -43,7 +43,7 @@ class DBProvider {
     );
   }
 
-  Future<int> inserRawScan(ScanModel nouScan) async {
+  Future<int> insertRawScan(ScanModel nouScan) async {
     final id = nouScan.id;
     final tipus = nouScan.tipus;
     final valor = nouScan.valor;
@@ -57,5 +57,11 @@ class DBProvider {
     return res;
   }
 
-  
+  Future<int> insertScan(ScanModel nouScan) async {
+    final db = await database;
+
+    final res = await db.insert('Scans', nouScan.toMap());
+    print(res);
+    return res; 
+  }
 }
